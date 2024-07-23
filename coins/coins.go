@@ -16,21 +16,6 @@ var (
 	Pieces   = []Piece{Platinum, Gold, Electrum, Silver, Copper}
 )
 
-// func NextDenomination(piece Piece) (Piece, error) {
-// 	switch piece {
-// 	case Platinum:
-// 		return Gold, nil
-// 	case Gold:
-// 		return Electrum, nil
-// 	case Electrum:
-// 		return Silver, nil
-// 	case Silver:
-// 		return Copper, nil
-// 	default:
-// 		return Copper, errors.New("not a valid denomination")
-// 	}
-// }
-
 func DenominationIndex(piece Piece) (int, error) {
 	switch piece {
 	case Platinum:
@@ -49,8 +34,8 @@ func DenominationIndex(piece Piece) (int, error) {
 }
 
 type Coinstack struct {
-	Type  Piece
-	Amout int
+	Type   Piece
+	Amount int
 }
 
 type Purse struct {

@@ -22,11 +22,11 @@ func purseString(purse c.Purse) (string, error) {
 	sb := strings.Builder{}
 
 	for i, p := range purse.Coins {
-		if p.Amout == 0 {
+		if p.Amount == 0 {
 			continue
 		}
 
-		s := fmt.Sprintf("%v%v", p.Amout, p.Type.Denomination)
+		s := fmt.Sprintf("%v%v", p.Amount, p.Type.Denomination)
 		if _, err := sb.WriteString(s); err != nil {
 			continue
 		}

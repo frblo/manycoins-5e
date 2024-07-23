@@ -1,84 +1,36 @@
 package coins
 
-// func TestNextDenominationPlatinum(t *testing.T) {
-// 	expected := Gold
-// 	got, err := NextDenomination(Platinum)
+import "testing"
 
-// 	if got != expected {
-// 		t.Errorf("got %v, wanted %v", got.Denomination, expected.Denomination)
-// 	}
+func TestDenominationIndex(t *testing.T) {
+	gotIndex := make([]int, len(Pieces))
+	gotErrors := make([]error, len(Pieces))
 
-// 	if err != nil {
-// 		t.Errorf("should not return error %v", err)
-// 	}
-// }
+	for i, p := range Pieces {
+		gotIndex[i], gotErrors[i] = DenominationIndex(p)
+	}
 
-// func TestNextDenominationGold(t *testing.T) {
-// 	expected := Electrum
-// 	got, err := NextDenomination(Gold)
+	for i := 0; i < len(gotIndex); i++ {
+		if gotIndex[i] != i {
+			t.Errorf("index of %v is %v, not %v", Pieces[i], gotIndex[i], i)
+		}
+		if gotErrors[i] != nil {
+			t.Errorf("%v should not generate error %v", Pieces[i], gotErrors[i])
+		}
+	}
+}
 
-// 	if got != expected {
-// 		t.Errorf("got %v, wanted %v", got.Denomination, expected.Denomination)
-// 	}
+func TestDenominationIndexInvalid(t *testing.T) {
+	mud := Piece{"mp", 9999}
 
-// 	if err != nil {
-// 		t.Errorf("should not return error %v", err)
-// 	}
-// }
+	expected := 4
 
-// func TestNextDenominationElectrum(t *testing.T) {
-// 	expected := Silver
-// 	got, err := NextDenomination(Electrum)
+	got, err := DenominationIndex(mud)
+	if err == nil {
+		t.Errorf("mud piece should generate an error")
+	}
 
-// 	if got != expected {
-// 		t.Errorf("got %v, wanted %v", got.Denomination, expected.Denomination)
-// 	}
-
-// 	if err != nil {
-// 		t.Errorf("should not return error %v", err)
-// 	}
-// }
-
-// func TestNextDenominationSilver(t *testing.T) {
-// 	expected := Copper
-// 	got, err := NextDenomination(Silver)
-
-// 	if got != expected {
-// 		t.Errorf("got %v, wanted %v", got.Denomination, expected.Denomination)
-// 	}
-
-// 	if err != nil {
-// 		t.Errorf("should not return error %v", err)
-// 	}
-// }
-
-// func TestNextDenominationCopper(t *testing.T) {
-// 	expected := Copper
-// 	got, err := NextDenomination(Copper)
-
-// 	if got != expected {
-// 		t.Errorf("got %v, wanted %v", got.Denomination, expected.Denomination)
-// 	}
-
-// 	if err == nil {
-// 		t.Errorf("copper should result in an error")
-// 	}
-// }
-
-// func TestNextDenominationNotValid(t *testing.T) {
-// 	mud := Piece{
-// 		Denomination: "mp",
-// 		ExchangeRate: 99999,
-// 	}
-
-// 	expected := Copper
-// 	got, err := NextDenomination(mud)
-
-// 	if got != expected {
-// 		t.Errorf("got %v, wanted %v", got.Denomination, expected.Denomination)
-// 	}
-
-// 	if err == nil {
-// 		t.Errorf("copper should result in an error")
-// 	}
-// }
+	if got != expected {
+		t.Errorf("mud piece should give position %v, not %v", expected, got)
+	}
+}

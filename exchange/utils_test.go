@@ -62,11 +62,11 @@ func TestPurseStringEmpty(t *testing.T) {
 
 func TestPurseStringOneDenomination(t *testing.T) {
 	purses := []c.Purse{
-		{Coins: []c.Coinstack{{Type: c.Platinum, Amout: 1}}},
-		{Coins: []c.Coinstack{{Type: c.Gold, Amout: 32}}},
-		{Coins: []c.Coinstack{{Type: c.Electrum, Amout: 9393399939393}}},
-		{Coins: []c.Coinstack{{Type: c.Silver, Amout: 587293}}},
-		{Coins: []c.Coinstack{{Type: c.Copper, Amout: 5}}},
+		{Coins: []c.Coinstack{{Type: c.Platinum, Amount: 1}}},
+		{Coins: []c.Coinstack{{Type: c.Gold, Amount: 32}}},
+		{Coins: []c.Coinstack{{Type: c.Electrum, Amount: 9393399939393}}},
+		{Coins: []c.Coinstack{{Type: c.Silver, Amount: 587293}}},
+		{Coins: []c.Coinstack{{Type: c.Copper, Amount: 5}}},
 	}
 
 	expectedStrings := []string{
@@ -100,11 +100,11 @@ func TestPurseStringOneDenomination(t *testing.T) {
 func TestPurseStringFull(t *testing.T) {
 	purse := c.Purse{
 		Coins: []c.Coinstack{
-			{Type: c.Platinum, Amout: 138},
-			{Type: c.Gold, Amout: 83},
-			{Type: c.Electrum, Amout: 32},
-			{Type: c.Silver, Amout: 6},
-			{Type: c.Copper, Amout: 39283},
+			{Type: c.Platinum, Amount: 138},
+			{Type: c.Gold, Amount: 83},
+			{Type: c.Electrum, Amount: 32},
+			{Type: c.Silver, Amount: 6},
+			{Type: c.Copper, Amount: 39283},
 		},
 	}
 
@@ -123,9 +123,9 @@ func TestPurseStringFull(t *testing.T) {
 func TestPurseStringSpotty(t *testing.T) {
 	purse := c.Purse{
 		Coins: []c.Coinstack{
-			{Type: c.Platinum, Amout: 138},
-			{Type: c.Gold, Amout: 83},
-			{Type: c.Copper, Amout: 39283},
+			{Type: c.Platinum, Amount: 138},
+			{Type: c.Gold, Amount: 83},
+			{Type: c.Copper, Amount: 39283},
 		},
 	}
 

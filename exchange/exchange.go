@@ -1,6 +1,7 @@
 package exchange
 
 import (
+	"log"
 	c "manycoins/coins"
 	"strings"
 )
@@ -10,13 +11,17 @@ func Exchange(purse c.Purse) string {
 
 	var purses []c.Purse
 
-	purses = append(purses, baseToPurse(baseValue, c.Platinum))
+	for i, p := range c.Pieces {
+		rebasedPurse := baseToPurse(baseValue, p)
+		if len(rebasedPurse.Coins) == 0 {
+			continue
+		}
+		if rebasedPurse.Coins[0].Type != c.Pieces[i] {
+			continue
+		}
 
-	for p, err := c.NextDenomination(c.Platinum); err == nil; p, err = c.NextDenomination(p) {
-		purses = append(purses, baseToPurse(baseValue, p))
+		purses = append(purses, rebasedPurse)
 	}
-
-	purses = append(purses, baseToPurse(baseValue, c.Copper))
 
 	sb := strings.Builder{}
 	for _, p := range purses {
@@ -25,6 +30,7 @@ func Exchange(purse c.Purse) string {
 			continue
 		}
 		sb.WriteString(ps)
+		sb.WriteRune('\n')
 	}
 
 	return sb.String()
@@ -34,38 +40,29 @@ func Exchange(purse c.Purse) string {
 func purseToBase(purse c.Purse) int {
 	sum := 0
 	for _, v := range purse.Coins {
-		sum += v.Amout * v.Type.ExchangeRate
+		sum += v.Amount * v.Type.ExchangeRate
 	}
 
 	return sum
 }
 
-func baseToCoin(base int, purse *c.Purse, p c.Piece) int {
-	amount, rem := modi(base, p.ExchangeRate)
-	if amount != 0 {
-		purse.Coins = append(purse.Coins, c.Coinstack{Type: p, Amout: amount})
-	}
-	return rem
-}
-
 func baseToPurse(base int, maxPiece c.Piece) c.Purse {
 	purse := c.Purse{}
 
-	if maxPiece.Denomination == c.Copper.Denomination {
-		purse.Coins = append(purse.Coins, c.Coinstack{Type: c.Copper, Amout: base})
+	maxIndex, err := c.DenominationIndex(maxPiece)
+	if err != nil {
+		log.Println(err)
 	}
 
-	rem := baseToCoin(base, &purse, maxPiece)
-	if rem == 0 && rem == base {
-		return purse
-	}
-	base = rem
-
-	for p, err := c.NextDenomination(maxPiece); err == nil; p, err = c.NextDenomination(p) {
-		rem := baseToCoin(base, &purse, p)
+	for i := maxIndex; i < len(c.Pieces); i++ {
+		amount, rem := modi(base, c.Pieces[i].ExchangeRate)
+		if amount != 0 {
+			purse.Coins = append(purse.Coins, c.Coinstack{Type: c.Pieces[i], Amount: amount})
+		}
 		if rem == 0 {
 			break
 		}
+
 		base = rem
 	}
 
