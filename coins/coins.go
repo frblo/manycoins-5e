@@ -1,6 +1,10 @@
 package coins
 
-import "errors"
+import (
+	"errors"
+	"log"
+	"slices"
+)
 
 type Piece struct {
 	Denomination string
@@ -16,21 +20,18 @@ var (
 	Pieces   = []Piece{Platinum, Gold, Electrum, Silver, Copper}
 )
 
-func DenominationIndex(piece Piece) (int, error) {
-	switch piece {
-	case Platinum:
-		return 0, nil
-	case Gold:
-		return 1, nil
-	case Electrum:
-		return 2, nil
-	case Silver:
-		return 3, nil
-	case Copper:
-		return 4, nil
-	default:
-		return 4, errors.New("not a valid denomination")
+func DenominationIndex(piece Piece, pieces []Piece) (int, error) {
+	index := slices.Index(pieces, piece)
+	if index != -1 {
+		return index, nil
 	}
+
+	copperIndex := slices.Index(Pieces, Copper)
+	if copperIndex != -1 {
+		return copperIndex, errors.New("could not find %v in given array, defaulting to copper")
+	}
+	log.Fatal("copper not in list of valid pieces")
+	return -1, errors.New("copper not in list of valid pieces")
 }
 
 type Coinstack struct {

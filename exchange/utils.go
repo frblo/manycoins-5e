@@ -14,7 +14,7 @@ func modi(x int, y int) (int, int) {
 	return res, rem
 }
 
-func purseString(purse c.Purse) (string, error) {
+func PurseString(purse c.Purse) (string, error) {
 	if len(purse.Coins) == 0 {
 		return "", errors.New("empty coin purse")
 	}

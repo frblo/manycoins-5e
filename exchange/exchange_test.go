@@ -121,7 +121,7 @@ func TestBaseToPurse(t *testing.T) {
 
 	got := make([]c.Purse, len(expected))
 	for i := 0; i < len(got); i++ {
-		got[i] = baseToPurse(base, c.Pieces[i])
+		got[i] = baseToPurse(base, c.Pieces[i], c.Pieces)
 	}
 
 	for i := 0; i < len(got); i++ {

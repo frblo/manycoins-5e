@@ -6,17 +6,21 @@ import (
 	"strings"
 )
 
-func Exchange(purse c.Purse) string {
+func Exchange(purse c.Purse, allowedPieces []c.Piece) string {
+	if len(allowedPieces) == 0 {
+		allowedPieces = c.Pieces
+	}
+
 	baseValue := purseToBase(purse)
 
 	var purses []c.Purse
 
-	for i, p := range c.Pieces {
-		rebasedPurse := baseToPurse(baseValue, p)
+	for i, p := range allowedPieces {
+		rebasedPurse := baseToPurse(baseValue, p, allowedPieces)
 		if len(rebasedPurse.Coins) == 0 {
 			continue
 		}
-		if rebasedPurse.Coins[0].Type != c.Pieces[i] {
+		if rebasedPurse.Coins[0].Type != allowedPieces[i] {
 			continue
 		}
 
@@ -25,7 +29,7 @@ func Exchange(purse c.Purse) string {
 
 	sb := strings.Builder{}
 	for _, p := range purses {
-		ps, err := purseString(p)
+		ps, err := PurseString(p)
 		if err != nil {
 			continue
 		}
@@ -46,18 +50,18 @@ func purseToBase(purse c.Purse) int {
 	return sum
 }
 
-func baseToPurse(base int, maxPiece c.Piece) c.Purse {
+func baseToPurse(base int, maxPiece c.Piece, pieces []c.Piece) c.Purse {
 	purse := c.Purse{}
 
-	maxIndex, err := c.DenominationIndex(maxPiece)
+	maxIndex, err := c.DenominationIndex(maxPiece, pieces)
 	if err != nil {
 		log.Println(err)
 	}
 
-	for i := maxIndex; i < len(c.Pieces); i++ {
-		amount, rem := modi(base, c.Pieces[i].ExchangeRate)
+	for i := maxIndex; i < len(pieces); i++ {
+		amount, rem := modi(base, pieces[i].ExchangeRate)
 		if amount != 0 {
-			purse.Coins = append(purse.Coins, c.Coinstack{Type: c.Pieces[i], Amount: amount})
+			purse.Coins = append(purse.Coins, c.Coinstack{Type: pieces[i], Amount: amount})
 		}
 		if rem == 0 {
 			break

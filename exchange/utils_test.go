@@ -49,7 +49,7 @@ func TestPurseStringEmpty(t *testing.T) {
 
 	expectedString := ""
 
-	gotString, err := purseString(purse)
+	gotString, err := PurseString(purse)
 
 	if err == nil {
 		t.Errorf("purseString with an emtpy purse should yield an error")
@@ -81,7 +81,7 @@ func TestPurseStringOneDenomination(t *testing.T) {
 	gotErrors := make([]error, len(purses))
 
 	for i := 0; i < len(purses); i++ {
-		gotStrings[i], gotErrors[i] = purseString(purses[i])
+		gotStrings[i], gotErrors[i] = PurseString(purses[i])
 	}
 
 	for i, gotString := range gotStrings {
@@ -109,7 +109,7 @@ func TestPurseStringFull(t *testing.T) {
 	}
 
 	expected := "138pp 83gp 32ep 6sp 39283cp"
-	got, err := purseString(purse)
+	got, err := PurseString(purse)
 
 	if got != expected {
 		t.Errorf("got %v as a string, wanted %v", got, expected)
@@ -130,7 +130,7 @@ func TestPurseStringSpotty(t *testing.T) {
 	}
 
 	expected := "138pp 83gp 39283cp"
-	got, err := purseString(purse)
+	got, err := PurseString(purse)
 
 	if got != expected {
 		t.Errorf("got %v as a string, wanted %v", got, expected)
