@@ -6,7 +6,7 @@ import (
 )
 
 func TestParseDenomination(t *testing.T) {
-	str := "5pp 3 gp 1sp 193ep 2gp 0    cp"
+	str := "5pp 3gp 1sp 193ep 2gp 0cp"
 
 	expected := []c.Coinstack{
 		{Type: c.Platinum, Amount: 5},
